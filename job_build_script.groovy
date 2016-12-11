@@ -1,5 +1,7 @@
 import utilities.configuration.ReadYaml
 
+final YAML_FILE_CONFIG_PATH = "/var/jenkins_home/job_dsl_script/jenkins_swarm.yaml"
+
 def createBuildJob(projectConfig, branchName) {
     def jobName = "${projectConfig.projectName}-build-${branchName}".replaceAll('/','-')
     mavenJob(jobName) {
@@ -21,7 +23,7 @@ def createBuildJob(projectConfig, branchName) {
 }
 
 ReadYaml readYaml = new ReadYaml()
-def projectConfigList = readYaml.readJenkinsYaml("/var/jenkins_home/job_dsl_script/jenkins_swarm.yaml")
+def projectConfigList = readYaml.readJenkinsYaml(YAML_FILE_CONFIG_PATH)
 def createdJobNames = [];
 
 projectConfigList.each {
