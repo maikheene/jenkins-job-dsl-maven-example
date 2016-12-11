@@ -1,4 +1,4 @@
-# Create a jenkins job dsl with an yaml configuration
+# Create a jenkins job dsl with a yaml configuration
 
 ## Create a seed job
 
