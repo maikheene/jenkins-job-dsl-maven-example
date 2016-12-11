@@ -15,7 +15,7 @@
    
 ## Yaml configuration file
 
-In the **_job_buildscript.grovy_** file you find the variable:
+In the **_job_buildscript.grovy_** file you find the constant:
 
 ```groovy
 final YAML_FILE_CONFIG_PATH = "/your/path/to/the/yaml/file"
