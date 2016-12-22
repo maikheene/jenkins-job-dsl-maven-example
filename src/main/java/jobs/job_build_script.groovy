@@ -1,25 +1,21 @@
 import utilities.configuration.ReadYaml
+import utilities.job.builder.MavenCiBuilder
 
 final YAML_FILE_CONFIG_PATH = "/var/jenkins_home/job_dsl_script/jenkins_swarm.yaml"
 
 def createBuildJob(projectConfig, branchName) {
-    def jobName = "${projectConfig.projectName}-build-${branchName}".replaceAll('/','-')
-    mavenJob(jobName) {
-        scm {
-            git {
-                remote {
-                    name('origin')
-                    url(projectConfig.gitConfig.url)
-                    credentials(projectConfig.gitConfig.credentialKeyId)
-                }
-                branch(branchName)
-            }
-        }
-        blockOnDownstreamProjects()
-        goals('clean package')
-    }
     
-    return jobName
+    def simpleMavenJob = new MavenCiBuilder (
+        jobName: "${projectConfig.projectName}-build-${branchName}".replaceAll('/','-'),
+        description: 'Simple maven build job',
+        numToKeep: 10,
+        daysToKeep: 90,
+        scmGitUrl: projectConfig.gitConfig.url,
+        branchName: branchName,
+        credentialKeyId: projectConfig.gitConfig.credentialKeyId
+    ).build(this)
+    
+    return simpleMavenJob.name
 }
 
 ReadYaml readYaml = new ReadYaml()
@@ -33,8 +29,6 @@ projectConfigList.each {
         def branchName = it
         def buildJobName = createBuildJob(projectConfig, branchName)
         createdJobNames << buildJobName
-        
-        
     }
 }
 
