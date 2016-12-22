@@ -8,9 +8,10 @@
 - In the **Build** section, add the build step **Process Job DSL**
   - Select the option **Look on File system**
   - Add your filename to the **DSL Scripts** field
-    - For this example enter **_job_build_script.groovy_**
-  - Open **Advanced** section and put **_lib/*.jar_** to the 
-  **Additional classpath** field. (Imports the snakeYaml libary)
+    - For this example enter **_src/main/java/jobs/\*\*/*.groovy_**
+  - Open **Advanced** section and put **_src/main/java_** and 
+  **_src/main/lib/*.jar_** to the **Additional classpath** field in 
+  spepareated rows. (Imports the snakeYaml libary and other classes)
 - Save
    
 ## Yaml configuration file
