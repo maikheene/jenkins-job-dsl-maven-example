@@ -12,7 +12,7 @@ class MavenCiBuilder {
     String jobName
     String description
     Integer numToKeep
-    Integer daysToKeep;
+    Integer daysToKeep
     String scmGitUrl
     String branchName
     String credentialKeyId

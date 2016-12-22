@@ -1,9 +1,13 @@
+
 import utilities.configuration.ReadYaml
 import utilities.job.builder.MavenCiBuilder
+import utilities.job.builder.ShellCiBuilder
 
 final YAML_FILE_CONFIG_PATH = "/var/jenkins_home/job_dsl_script/jenkins_swarm.yaml"
 
-def createBuildJob(projectConfig, branchName) {
+def createBuildJobs(projectConfig, branchName) {
+    
+    def jobNames = []
     
     def simpleMavenJob = new MavenCiBuilder (
         jobName: "${projectConfig.projectName}-build-${branchName}".replaceAll('/','-'),
@@ -14,8 +18,19 @@ def createBuildJob(projectConfig, branchName) {
         branchName: branchName,
         credentialKeyId: projectConfig.gitConfig.credentialKeyId
     ).build(this)
+    jobNames << simpleMavenJob.name.toString()
     
-    return simpleMavenJob.name
+    def simpleShellJob = new ShellCiBuilder(
+        jobName: "${projectConfig.projectName}-script-${branchName}".replaceAll('/','-'),
+        description: 'Simple script build job',
+        numToKeep: 10,
+        daysToKeep: 90,
+        scriptsToRun: ["${WORKSPACE}/src/main/resources/test1.sh"
+        , "${WORKSPACE}/src/main/resources/test2.sh"]
+    ).build(this)
+    jobNames << simpleShellJob.name.toString()
+    
+    return jobNames
 }
 
 ReadYaml readYaml = new ReadYaml()
@@ -27,8 +42,8 @@ projectConfigList.each {
     def projectConfig = it
     projectConfig.gitConfig.branchesToBuild.each {
         def branchName = it
-        def buildJobName = createBuildJob(projectConfig, branchName)
-        createdJobNames << buildJobName
+        def buildJobNames = createBuildJobs(projectConfig, branchName)
+        createdJobNames.addAll(buildJobNames)
     }
 }
 
