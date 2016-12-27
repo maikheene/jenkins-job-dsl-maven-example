@@ -16,7 +16,8 @@ class ShellCiBuilder {
     List<String> scriptsToRun
     
     Job build(DslFactory dslFactory) {
-        dslFactory.freeStyleJob(jobName) {  
+        dslFactory.freeStyleJob(jobName) {
+            description(this.description)
             logRotator {
                 numToKeep = this.numToKeep
                 daysToKeep = this.daysToKeep
