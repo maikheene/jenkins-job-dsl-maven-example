@@ -23,13 +23,15 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.groovy.maven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <version>1.0</version>
-                <extensions>true</extensions>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>1.5</version>
                 <executions>
                     <execution>
                         <goals>
+                            <goal>addSources</goal>
+                            <goal>addTestSources</goal>
+                            <goal>compile</goal>
                             <goal>testCompile</goal>
                         </goals>
                         <configuration>
@@ -52,7 +54,12 @@
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>2.0.6</version>
+            <version>2.4.7</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
         </dependency>
         <dependency>
             <groupId>org.jenkins-ci.plugins</groupId>
