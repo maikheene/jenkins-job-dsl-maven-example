@@ -13,6 +13,20 @@
   **_src/main/lib/*.jar_** to the **Additional classpath** field in 
   spepareated rows. (Imports the snakeYaml libary and other classes)
 - Save
+
+## File structure
+
+    .
+    ├── src
+    │   ├── main
+    │   │   ├── groovy          
+    |   |   |   └── jobs        # DSL script files
+    |   |   |   └── utilities   # created classes for job DSL
+    |   |   |   └── lib         # libs that the job DSL is use 
+    │   │   └── resources       # resources (like scripts etc.) for job DSL
+    │   └── test
+    │       └── groovy          # unit tests
+    └── pom.xml                 # maven build file
    
 ## Yaml configuration file
 
