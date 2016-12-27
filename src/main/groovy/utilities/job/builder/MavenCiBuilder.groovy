@@ -18,7 +18,8 @@ class MavenCiBuilder {
     String credentialKeyId
     
     Job build(DslFactory dslFactory) {
-        dslFactory.mavenJob(jobName) {  
+        dslFactory.mavenJob(jobName) {
+            description(this.description)
             logRotator {
                 numToKeep = this.numToKeep
                 daysToKeep = this.daysToKeep

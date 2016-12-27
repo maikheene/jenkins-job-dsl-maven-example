@@ -34,7 +34,6 @@ class ShellCiBuilderTest {
     
     @Test
     void textXmlBasicJobConfiguration() {
-        println("Test1")
         Job job = builder.build(jobParent)
         def node = job.node
         
@@ -56,7 +55,6 @@ class ShellCiBuilderTest {
     
     @Test
     void testXmlOfShellCiBuilderWithOverwriteValues() {
-        println("Test2")
         builder.jobName = "OverwriteJobName"
         builder.numToKeep = 20
         builder.daysToKeep = 120
