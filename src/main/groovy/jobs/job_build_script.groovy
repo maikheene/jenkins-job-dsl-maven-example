@@ -4,13 +4,11 @@ import utilities.job.builder.MavenCiBuilder
 import utilities.job.builder.ShellCiBuilder
 
 final YAML_FILE_CONFIG_PATH = "/var/jenkins_home/job_dsl_script/jenkins_swarm.yaml"
+final BASE_PATH = "createdJobs"
 
-def createBuildJobs(projectConfig, branchName) {
-    
-    def jobNames = []
-    
-    def simpleMavenJob = new MavenCiBuilder (
-        jobName: "${projectConfig.projectName}-build-${branchName}".replaceAll('/','-'),
+def createBuildJobs(projectConfig, basePath, branchName) {
+    new MavenCiBuilder (
+        jobName: "${basePath}/${projectConfig.projectName}-build-${branchName}",
         description: 'Simple maven build job',
         numToKeep: 10,
         daysToKeep: 90,
@@ -18,49 +16,36 @@ def createBuildJobs(projectConfig, branchName) {
         branchName: branchName,
         credentialKeyId: projectConfig.gitConfig.credentialKeyId
     ).build(this)
-    jobNames << simpleMavenJob.name.toString()
     
-    def simpleShellJob = new ShellCiBuilder(
-        jobName: "${projectConfig.projectName}-script-${branchName}".replaceAll('/','-'),
+    new ShellCiBuilder(
+        jobName: "${basePath}/${projectConfig.projectName}-script-${branchName}",
         description: 'Simple script build job',
         numToKeep: 10,
         daysToKeep: 90,
         scriptsToRun: ["${WORKSPACE}/src/main/resources/test1.sh"
-        , "${WORKSPACE}/src/main/resources/test2.sh"]
+            , "${WORKSPACE}/src/main/resources/test2.sh"]
     ).build(this)
-    jobNames << simpleShellJob.name.toString()
-    
-    return jobNames
 }
 
 ReadYaml readYaml = new ReadYaml()
 def projectConfigList = readYaml.readJenkinsYaml(YAML_FILE_CONFIG_PATH)
-def createdJobNames = [];
 
-projectConfigList.each {
-    
-    def projectConfig = it
-    projectConfig.gitConfig.branchesToBuild.each {
-        def branchName = it
-        def buildJobNames = createBuildJobs(projectConfig, branchName)
-        createdJobNames.addAll(buildJobNames)
-    }
+folder(BASE_PATH) {
+    description 'All jobs that are created with the seed job'
 }
 
-listView('Build-Job-View') {
-    jobs { 
-        createdJobNames.each {
-            name(it)
-        }
+projectConfigList.each { projectConfig ->
+    def projectBasePath = "${BASE_PATH}/${projectConfig.projectName}"
+    folder(projectBasePath) {
+        description 'All branch pipelines'
     }
-    columns {
-	status()
-	weather()
-	name()
-	lastSuccess()
-	lastFailure()
-	lastDuration()
-	buildButton()
+    projectConfig.gitConfig.branchesToBuild.each { branchName ->
+        def branchPath = "${projectBasePath}/${branchName}"
+        folder(branchPath) {
+            description 'All jobs for the pipeline'
+        }
+        def buildJobNames = createBuildJobs(
+            projectConfig, branchPath, branchName)
     }
 }
 
