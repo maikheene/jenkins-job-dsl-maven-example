@@ -2,6 +2,7 @@ package utilities.job.builder
 
 import javaposse.jobdsl.dsl.Job
 import javaposse.jobdsl.dsl.JobParent
+import javaposse.jobdsl.dsl.jobs.MavenJob
 import org.junit.*
 import static groovy.test.GroovyAssert.*
 
@@ -38,6 +39,9 @@ class MavenCiBuilderTest {
     void textXmlBasicJobConfiguration() {
         Job job = builder.build(jobParent)
         def node = job.node
+        
+        //Check job type
+        assertTrue(job instanceof MavenJob)
         
         //Check job name
         assertEquals(job.name, this.jobName)

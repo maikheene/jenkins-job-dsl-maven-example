@@ -2,6 +2,7 @@ package utilities.job.builder
 
 import javaposse.jobdsl.dsl.Job
 import javaposse.jobdsl.dsl.JobParent
+import javaposse.jobdsl.dsl.jobs.FreeStyleJob
 import org.junit.*
 import static groovy.test.GroovyAssert.*
 
@@ -61,6 +62,9 @@ class ShellCiBuilderTest {
         
         Job job = builder.build(jobParent)
         def node = job.node
+        
+        //Check job type
+        assertTrue(job instanceof FreeStyleJob)
         
         //CheckJob
         assertEquals(job.name, "OverwriteJobName")
