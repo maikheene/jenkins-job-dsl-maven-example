@@ -1,4 +1,4 @@
-# Create a jenkins job dsl with a yaml configuration
+# Create a jenkins job dsl with maven and use a yaml configuration
 
 ## Create a seed job
 
